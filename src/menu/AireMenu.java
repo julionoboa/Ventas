@@ -22,19 +22,19 @@ public class AireMenu {
         Scanner sc = new Scanner(System.in);
         int repetir = -1;
 
-        while (repetir < 0){
+        while (repetir < 0) {
             System.out.println("Favor ingrese opción a realizar:");
             System.out.println("1. Ventas");
             System.out.println("2. Inventario");
             System.out.println("0. Salir");
             int option = validate(sc);
 
-                while (option < 0 || option > 2) {
-                    System.out.println("Introduzca un número del 0 al 2");
-                    option = validate(sc);
-                }
+            while (option < 0 || option > 2) {
+                System.out.println("Introduzca un número del 0 al 2");
+                option = validate(sc);
+            }
 
-            switch (option){
+            switch (option) {
                 case 1:
                     System.out.println("***VENTAS***");
                     System.out.println("Ingrese una de las siguientes opciones:");
@@ -50,7 +50,7 @@ public class AireMenu {
                         option = validate(sc);
                     }
 
-                    switch (option){
+                    switch (option) {
                         case 1:
                             ventaService.insert(venta);
                             break;
@@ -62,7 +62,7 @@ public class AireMenu {
                             break;
                         case 4:
                             ventaList = ventaService.showAll(venta);
-                            for (Venta i : ventaList){
+                            for (Venta i : ventaList) {
                                 ventaService.showSales(i);
                             }
                             break;
@@ -83,7 +83,7 @@ public class AireMenu {
                         option = validate(sc);
                     }
 
-                    switch (option){
+                    switch (option) {
                         case 1:
                             aireService.insert(aire);
                             break;
@@ -95,7 +95,7 @@ public class AireMenu {
                             break;
                         case 4:
                             aireList = aireService.showAll(aire);
-                            for (Aire i : aireList){
+                            for (Aire i : aireList) {
                                 aireService.showAC(i);
                             }
                             break;
@@ -116,14 +116,13 @@ public class AireMenu {
     public int validate(Scanner sc) {
         int i = -1;
 
-        while (i < 0 ) {
+        while (i < 0) {
 
             String optionMenu = sc.nextLine();
 
             try {
                 i = Integer.valueOf(optionMenu);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Debe introducir un número válido");
                 i = -1;
             }

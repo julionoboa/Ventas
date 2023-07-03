@@ -12,27 +12,28 @@ public class VentaDAOImplementation implements VentaDAO {
     String url = "jdbc:mysql://localhost:3306/tienda";
     String username = "root";
     String password = "root";
+
     @Override
     public void insert(Venta venta) {
-        try (Connection con = DriverManager.getConnection(url,username,password)){
+        try (Connection con = DriverManager.getConnection(url, username, password)) {
             String sql = "INSERT INTO venta (marcaVenta, tipoVenta, cantidadVenta, totalVenta, idAire) VALUES (?, ?, ?, ?, ?)";
             String sql2 = "UPDATE aire SET cantidadAire = (cantidadAire - ?) WHERE idAire = ?";
-            try (PreparedStatement ps = con.prepareStatement(sql)){
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setString(1, venta.marcaVenta);
-                ps.setString(2,venta.tipoVenta);
-                ps.setInt(3,venta.cantidadVenta);
-                ps.setDouble(4,venta.totalVenta);
+                ps.setString(2, venta.tipoVenta);
+                ps.setInt(3, venta.cantidadVenta);
+                ps.setDouble(4, venta.totalVenta);
                 ps.setInt(5, venta.idAire);
 
                 ps.executeUpdate();
             }
-            try (PreparedStatement ps1 = con.prepareStatement(sql2)){
+            try (PreparedStatement ps1 = con.prepareStatement(sql2)) {
                 ps1.setInt(1, venta.cantidadVenta);
                 ps1.setInt(2, venta.idAire);
 
                 ps1.executeUpdate();
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -57,30 +58,30 @@ public class VentaDAOImplementation implements VentaDAO {
 
     @Override
     public int delete(Venta venta) {
-            int affectedRows = 0;
+        int affectedRows = 0;
 
-            try(Connection con = DriverManager.getConnection(url, username, password)){
-                String sql = "DELETE FROM venta WHERE idVenta = ?";
-                try(PreparedStatement ps = con.prepareStatement(sql)){
-                    ps.setInt(1, venta.idVenta);
+        try (Connection con = DriverManager.getConnection(url, username, password)) {
+            String sql = "DELETE FROM venta WHERE idVenta = ?";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, venta.idVenta);
 
-                    affectedRows = ps.executeUpdate();
-                }
-            } catch (SQLException e){
-                e.printStackTrace();
+                affectedRows = ps.executeUpdate();
             }
-            return affectedRows;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return affectedRows;
+    }
 
     @Override
     public Venta getByID(int id) {
-        try(Connection con = DriverManager.getConnection(url, username, password)){
+        try (Connection con = DriverManager.getConnection(url, username, password)) {
             String sql = "SELECT * FROM venta WHERE idVenta = ?";
-            try(PreparedStatement ps = con.prepareStatement(sql)){
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, id);
-                ResultSet rs =ps.executeQuery();
+                ResultSet rs = ps.executeQuery();
 
-                while (rs.next()){
+                while (rs.next()) {
                     int idVenta = rs.getInt(1);
                     String marcaVenta = rs.getString(2);
                     String tipoVenta = rs.getString(3);
@@ -99,7 +100,7 @@ public class VentaDAOImplementation implements VentaDAO {
                     return venta;
                 }
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -109,14 +110,14 @@ public class VentaDAOImplementation implements VentaDAO {
     public List<Venta> showAll() {
         List<Venta> ventaList = new ArrayList<>();
 
-        try(Connection con = DriverManager.getConnection(url, username, password)){
+        try (Connection con = DriverManager.getConnection(url, username, password)) {
             String sql = "SELECT * FROM venta";
 
-            try(PreparedStatement ps = con.prepareStatement(sql)){
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
 
                 ResultSet rs = ps.executeQuery();
 
-                while (rs.next()){
+                while (rs.next()) {
                     int idVenta = rs.getInt(1);
                     String marcaVenta = rs.getString(2);
                     String tipoVenta = rs.getString(3);
@@ -136,7 +137,7 @@ public class VentaDAOImplementation implements VentaDAO {
                 }
 
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return ventaList;

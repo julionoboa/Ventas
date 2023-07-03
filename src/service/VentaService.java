@@ -46,10 +46,10 @@ public class VentaService {
 
         int cantidadVentaInt = convertToNumber(cantidadVenta);
 
-        while(cantidadVentaInt == 0){
+        while (cantidadVentaInt == 0) {
             System.out.println("La cantidad no puede ser 0, ingrese la cantidad de aires a vender (No debe ser mayor a la cantidad existente):");
             cantidadVenta = sc.nextLine();
-            while (!validateNumber(cantidadVenta)){
+            while (!validateNumber(cantidadVenta)) {
                 System.out.println("Debe ser un número");
                 cantidadVenta = sc.nextLine();
             }
@@ -161,6 +161,7 @@ public class VentaService {
     public List<Venta> showAll(Venta venta) {
         return ventaDAO.showAll();
     }
+
     public Venta getByID(int idVenta) {
         return ventaDAO.getByID(idVenta);
     }

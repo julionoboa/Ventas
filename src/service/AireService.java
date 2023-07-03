@@ -10,12 +10,14 @@ import java.util.Scanner;
 public class AireService {
     Scanner sc = new Scanner(System.in);
     int repetir = -1;
-    public AireService(AireDAO aireDAO){
+
+    public AireService(AireDAO aireDAO) {
         this.aireDAO = aireDAO;
     }
+
     private AireDAO aireDAO;
 
-    public void insert(Aire aire){
+    public void insert(Aire aire) {
 
         while (repetir < 0) {
 
@@ -72,7 +74,7 @@ public class AireService {
 
             aire.cantidadAire = Integer.parseInt(cantidadAire);
 
-            while (aire.cantidadAire <= 0){
+            while (aire.cantidadAire <= 0) {
                 System.out.println("La cantidad no puede ser 0 o menor a 0, favor ingresar cantidad nuevamente:");
                 cantidadAire = sc.nextLine();
                 while (!validateNull(cantidadAire) || !validateNumber(cantidadAire)) {
@@ -92,7 +94,7 @@ public class AireService {
 
             aire.precioAire = Double.parseDouble(precioAire);
 
-            while (aire.precioAire <= 0){
+            while (aire.precioAire <= 0) {
                 System.out.println("La cantidad no puede ser 0 o menor a 0, favor ingresar cantidad nuevamente:");
                 precioAire = sc.nextLine();
                 while (!validateNull(precioAire) || !validateDouble(precioAire)) {
@@ -109,73 +111,73 @@ public class AireService {
 
     }
 
-    public void update(Aire aire){
+    public void update(Aire aire) {
         int idAireInt = validation();
         aire = getByID(idAireInt);
         showAC(aire);
         System.out.println("Solo se puede actualizar la cantidad. Ingrese nueva cantidad:");
         String cantidadAire = sc.nextLine();
-        while (!validateNumber(cantidadAire)){
+        while (!validateNumber(cantidadAire)) {
             System.out.println("Introduzca un número correcto");
             cantidadAire = sc.nextLine();
-        };
+        }
+        ;
         aire.cantidadAire = Integer.parseInt(cantidadAire);
         aire.idAire = idAireInt;
         aireDAO.update(aire);
     }
 
-    public void delete(Aire aire){
+    public void delete(Aire aire) {
         int idAireInt = validation();
         aire = getByID(idAireInt);
         showAC(aire);
         System.out.println("¿Desea borrar este aire?");
         int klk = yesOrNot(sc);
-        while(klk == 0){
+        while (klk == 0) {
             klk = yesOrNot(sc);
-        };
-        if (klk ==1) aireDAO.delete(aire);
+        }
+        ;
+        if (klk == 1) aireDAO.delete(aire);
 
     }
 
-    public List<Aire> showAll(Aire aire){
+    public List<Aire> showAll(Aire aire) {
         return aireDAO.showAll();
     }
 
-    public Aire getByID(int idAire){
+    public Aire getByID(int idAire) {
         return aireDAO.getByID(idAire);
     }
 
-    private boolean validateBrandAndType(String marcaAire, String tipoAire){
+    private boolean validateBrandAndType(String marcaAire, String tipoAire) {
         List<Aire> aireList = aireDAO.showAll();
-        for (Aire i: aireList){
-            if (i.marcaAire.equals(marcaAire)){
-                if (i.tipoAire.equals(tipoAire)){
-                System.out.println("El aire ya existe en la base de datos.");
-                return false;
+        for (Aire i : aireList) {
+            if (i.marcaAire.equals(marcaAire)) {
+                if (i.tipoAire.equals(tipoAire)) {
+                    System.out.println("El aire ya existe en la base de datos.");
+                    return false;
+                }
             }
-        }
         }
         return true;
     }
 
-    private void checkAC(){
+    private void checkAC() {
         List<Aire> aireList = aireDAO.showAll();
-        for (Aire i: aireList){
+        for (Aire i : aireList) {
             showAC(i);
-            }
         }
+    }
 
 
-    private boolean validateNull(String aire){
+    private boolean validateNull(String aire) {
 
-        if (aire == null){
+        if (aire == null) {
 
             System.out.println("No puede contener valores nulos.");
             return false;
 
-        }
-
-        else if(aire instanceof String && ((String) aire).isBlank()) {
+        } else if (aire instanceof String && ((String) aire).isBlank()) {
 
             System.out.println("Ningún campo puede estar vacío.");
             return false;
@@ -195,17 +197,17 @@ public class AireService {
         return true;
     }
 
-    private int convertToNumber(String number){
+    private int convertToNumber(String number) {
         int newNumber = 0;
-        try{
+        try {
             newNumber = Integer.parseInt(number);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Debe introducir un número válido");
         }
         return newNumber;
     }
 
-    public Aire showAC(Aire i){
+    public Aire showAC(Aire i) {
         System.out.println("-------------------------------");
         System.out.println("ID: " + i.idAire);
         System.out.println("Marca: " + i.marcaAire);
@@ -216,23 +218,25 @@ public class AireService {
         return null;
     }
 
-    private int validation(){
+    private int validation() {
         checkAC();
         System.out.println("Seleccione el ID del aire:");
         String idAire = sc.nextLine();
-        while (!validateNumber(idAire)){
+        while (!validateNumber(idAire)) {
             System.out.println("Introduzca un número correcto");
             idAire = sc.nextLine();
-        };
+        }
+        ;
         int idAireInt = convertToNumber(idAire);
 
-        while (getByID(idAireInt) == null){
+        while (getByID(idAireInt) == null) {
             System.out.println("El ID introducido no existe, favor introducir ID válido");
             idAire = sc.nextLine();
-            while (!validateNumber(idAire)){
+            while (!validateNumber(idAire)) {
                 System.out.println("Introduzca un número correcto");
                 idAire = sc.nextLine();
-            };
+            }
+            ;
             idAireInt = convertToNumber(idAire);
         }
         return idAireInt;
@@ -244,24 +248,22 @@ public class AireService {
         System.out.println("No(N)");
 
 
-            entrada = sc.nextLine();
-            entrada = entrada.toUpperCase();
-            if (entrada.equalsIgnoreCase("Y")){
-                return 1;
-            }
-            else if (entrada.equalsIgnoreCase("N")){
-                return 2;
-            }
-            else {
-                System.out.println("Debe ser Y o N");
-            }
+        entrada = sc.nextLine();
+        entrada = entrada.toUpperCase();
+        if (entrada.equalsIgnoreCase("Y")) {
+            return 1;
+        } else if (entrada.equalsIgnoreCase("N")) {
+            return 2;
+        } else {
+            System.out.println("Debe ser Y o N");
+        }
         return 0;
     }
 
-    private boolean validateDouble(String number){
+    private boolean validateDouble(String number) {
         try {
             Double.parseDouble(number);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Debe introducir un número válido");
             return false;
         }
