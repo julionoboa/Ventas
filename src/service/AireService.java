@@ -9,19 +9,104 @@ import java.util.Scanner;
 
 public class AireService {
     Scanner sc = new Scanner(System.in);
+    int repetir = -1;
     public AireService(AireDAO aireDAO){
         this.aireDAO = aireDAO;
     }
     private AireDAO aireDAO;
 
     public void insert(Aire aire){
-        if (validateBrandAndType(aire.marcaAire, aire.tipoAire)) {
-            if (validateNull(aire.idAire) && validateNull(aire.cantidadAire) &&
-                    validateNull(aire.precioAire) && validateNull(aire.marcaAire) &&
-                    validateNull(aire.tipoAire) && validateNull(aire.cantidadAire)) {
-                aireDAO.insert(aire);
+
+        while (repetir < 0) {
+
+            System.out.println("Ingrese la marca del aire a crear:");
+            aire.marcaAire = sc.nextLine();
+
+            while (!validateNull(aire.marcaAire)) {
+                System.out.println("Ingrese la marca del aire a crear:");
+                aire.marcaAire = sc.nextLine();
             }
+
+            System.out.println("Ingrese el tipo de aire:");
+            aire.tipoAire = sc.nextLine();
+
+
+            while (!validateNull(aire.tipoAire)) {
+                System.out.println("Ingrese el tipo de aire:");
+                aire.tipoAire = sc.nextLine();
+            }
+
+            while (!validateBrandAndType(aire.marcaAire, aire.tipoAire)) {
+                System.out.println("El tipo y la marca de aire ya existen, en caso de querer modificar debe utilizar");
+                System.out.println("la opción correspondiente.");
+
+                System.out.println("Ingrese la marca del aire a crear (o escriba 0 para salir):");
+                aire.marcaAire = sc.nextLine();
+                if (aire.tipoAire == "0") break;
+                ;
+
+                while (!validateNull(aire.marcaAire)) {
+                    System.out.println("Ingrese la marca del aire a crear:");
+                    aire.marcaAire = sc.nextLine();
+                    if (aire.marcaAire == "0") break;
+                }
+
+                System.out.println("Ingrese el tipo de aire (o escriba 0 para salir):");
+                aire.tipoAire = sc.nextLine();
+                if (aire.tipoAire == "0") break;
+
+                while (!validateNull(aire.tipoAire)) {
+                    System.out.println("Ingrese el tipo de aire:");
+                    aire.tipoAire = sc.nextLine();
+                    if (aire.tipoAire == "0") break;
+                }
+            }
+
+            System.out.println("Ingrese la cantidad de aires que habrán en existencia:");
+            String cantidadAire = sc.nextLine();
+
+            while (!validateNull(cantidadAire) || !validateNumber(cantidadAire)) {
+                System.out.println("Ingrese la cantidad de aires que habrán en existencia (No debe ser 0):");
+                cantidadAire = sc.nextLine();
+            }
+
+            aire.cantidadAire = Integer.parseInt(cantidadAire);
+
+            while (aire.cantidadAire <= 0){
+                System.out.println("La cantidad no puede ser 0 o menor a 0, favor ingresar cantidad nuevamente:");
+                cantidadAire = sc.nextLine();
+                while (!validateNull(cantidadAire) || !validateNumber(cantidadAire)) {
+                    System.out.println("Ingrese la cantidad de aires que habrán en existencia (No debe ser 0):");
+                    cantidadAire = sc.nextLine();
+                }
+                aire.cantidadAire = Integer.parseInt(cantidadAire);
+            }
+
+            System.out.println("Ingrese el precio unitario que tendrá el aire:");
+            String precioAire = sc.nextLine();
+
+            while (!validateDouble(precioAire) || !validateNull(precioAire)) {
+                System.out.println("Ingrese el precio unitario que tendrá el aire:");
+                precioAire = sc.nextLine();
+            }
+
+            aire.precioAire = Double.parseDouble(precioAire);
+
+            while (aire.precioAire <= 0){
+                System.out.println("La cantidad no puede ser 0 o menor a 0, favor ingresar cantidad nuevamente:");
+                precioAire = sc.nextLine();
+                while (!validateNull(precioAire) || !validateDouble(precioAire)) {
+                    System.out.println("Ingrese la cantidad de aires que habrán en existencia (No debe ser 0):");
+                    precioAire = sc.nextLine();
+                }
+                aire.precioAire = Double.parseDouble(precioAire);
+            }
+
+            aireDAO.insert(aire);
+            repetir = 0;
         }
+        repetir = -1;
+
     }
 
     public void update(Aire aire){
@@ -60,7 +145,7 @@ public class AireService {
         return aireDAO.getByID(idAire);
     }
 
-    public boolean validateBrandAndType(String marcaAire, String tipoAire){
+    private boolean validateBrandAndType(String marcaAire, String tipoAire){
         List<Aire> aireList = aireDAO.showAll();
         for (Aire i: aireList){
             if (i.marcaAire.equals(marcaAire)){
@@ -73,7 +158,7 @@ public class AireService {
         return true;
     }
 
-    public void checkAC(){
+    private void checkAC(){
         List<Aire> aireList = aireDAO.showAll();
         for (Aire i: aireList){
             showAC(i);
@@ -81,14 +166,16 @@ public class AireService {
         }
 
 
-    public <T> boolean validateNull(T aire){
+    private boolean validateNull(String aire){
 
         if (aire == null){
 
             System.out.println("No puede contener valores nulos.");
             return false;
+
         }
-        else if(aire instanceof String && ((String) aire).isEmpty()) {
+
+        else if(aire instanceof String && ((String) aire).isBlank()) {
 
             System.out.println("Ningún campo puede estar vacío.");
             return false;
@@ -101,14 +188,14 @@ public class AireService {
     public boolean validateNumber(String number) {
         try {
             BigInteger.valueOf(Long.parseLong(number));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("Debe introducir un número válido");
             return false;
         }
         return true;
     }
 
-    public int convertToNumber(String number){
+    private int convertToNumber(String number){
         int newNumber = 0;
         try{
             newNumber = Integer.parseInt(number);
@@ -129,7 +216,7 @@ public class AireService {
         return null;
     }
 
-    public int validation(){
+    private int validation(){
         checkAC();
         System.out.println("Seleccione el ID del aire:");
         String idAire = sc.nextLine();
@@ -151,7 +238,7 @@ public class AireService {
         return idAireInt;
     }
 
-    public int yesOrNot(Scanner sc) {
+    private int yesOrNot(Scanner sc) {
         String entrada;
         System.out.println("Si(Y)");
         System.out.println("No(N)");
@@ -169,6 +256,16 @@ public class AireService {
                 System.out.println("Debe ser Y o N");
             }
         return 0;
+    }
+
+    private boolean validateDouble(String number){
+        try {
+            Double.parseDouble(number);
+        } catch (NumberFormatException e){
+            System.out.println("Debe introducir un número válido");
+            return false;
+        }
+        return true;
     }
 
 }

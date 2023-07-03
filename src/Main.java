@@ -1,6 +1,7 @@
 import dao.AireDAO;
 import dao.impl.AireDAOImplementation;
 import dao.impl.VentaDAOImplementation;
+import menu.AireMenu;
 import model.Aire;
 import model.Venta;
 import service.AireService;
@@ -11,12 +12,14 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        AireService aireService = new AireService(new AireDAOImplementation());
-        VentaService ventaService = new VentaService(new VentaDAOImplementation());
-        Aire aire = new Aire();
+        AireMenu aireMenu = new AireMenu();
+        aireMenu.menu();
+//        AireService aireService = new AireService(new AireDAOImplementation());
+//        VentaService ventaService = new VentaService(new VentaDAOImplementation());
+//        Aire aire = new Aire();
 //        List<Aire> aireList = aireService.showAll(aire);
-        Venta venta = new Venta();
-        ventaService.delete(venta);
+//        Venta venta = new Venta();
+//        ventaService.update(venta);
 //        aireService.insert(aire);
 //        List<Venta> ventaList = ventaService.showAll(venta);
 //        aire = aireService.getByID(2);
