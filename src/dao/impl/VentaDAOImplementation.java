@@ -1,7 +1,6 @@
 package dao.impl;
 
 import dao.VentaDAO;
-import model.Aire;
 import model.Venta;
 
 import java.sql.*;
